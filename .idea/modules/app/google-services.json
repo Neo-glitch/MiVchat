@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1004813116441",
+    "firebase_url": "https://mivchat-97347.firebaseio.com",
+    "project_id": "mivchat-97347",
+    "storage_bucket": "mivchat-97347.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004813116441:android:4cdc2e1a71c69e72b33688",
+        "android_client_info": {
+          "package_name": "com.neo.mivchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004813116441-a5v1vg3l8n4ij9ng8357fh5fqtidsvku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.neo.mivchat",
+            "certificate_hash": "b11733eadb605fc1778a0c0eb3a7dfd22774d4e9"
+          }
+        },
+        {
+          "client_id": "1004813116441-g50e4kia30noe2t3m64i5sed9cq40pqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHWP-QXgien4nuBNAmZ1UkyzHA4Otvhic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004813116441-g50e4kia30noe2t3m64i5sed9cq40pqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

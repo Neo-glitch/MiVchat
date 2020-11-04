@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MiVchat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--  fragment tags  -->
+    <string name="home_fragment">home</string>
+    <string name="find_friends_fragment">findFriends</string>
+    <string name="notifications_fragment">notifications</string>
+    <string name="call_fragment">call</string>
+    <string name="profile_fragment">profile</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:layout_centerVertical="true"
+        android:icon="@drawable/ic_home"
+        android:title="" />
+    <item
+        android:id="@+id/findFriendsFragment"
+        android:layout_centerVertical="true"
+        android:icon="@drawable/find_people"
+        android:title="" />
+    <item
+        android:id="@+id/notificationsFragment"
+        android:layout_centerVertical="true"
+        android:icon="@drawable/ic_notificaions"
+        android:title="" />
+</menu>
