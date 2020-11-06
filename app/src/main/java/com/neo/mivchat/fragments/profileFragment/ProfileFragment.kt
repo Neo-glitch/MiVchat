@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -15,7 +13,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.neo.mivchat.R
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 
@@ -46,9 +43,9 @@ class ProfileFragment : Fragment() {
         FirebaseDatabase.getInstance().reference.child("users")
     }
     private val mFriendsRef by lazy {
-        FirebaseDatabase.getInstance().reference.child("friend")
+        FirebaseDatabase.getInstance().reference.child("friends")
     }
-    private val mFriendsRequestRef by lazy {
+    private val mFriendRequestsRef by lazy {
         FirebaseDatabase.getInstance().reference.child("friend_requests")
     }
     private val mAuth by lazy {
@@ -74,6 +71,7 @@ class ProfileFragment : Fragment() {
 
         if(mReceiverUserImage != ""){
             Picasso.get().load(mReceiverUserImage).placeholder(R.drawable.profile_image).into(view.user_image_profile)
+            Picasso.get().load(mReceiverUserImage).placeholder(R.drawable.profile_image).into(view.user_image_profile_small)
         }
         view.user_name_profile.text = mReceiverUserName
 
@@ -88,11 +86,11 @@ class ProfileFragment : Fragment() {
 
     private fun sendFriendRequest() {
         Log.d(TAG, "sendFriendRequest: starts")
-        mFriendsRequestRef.child(mSenderId).child(mReceiverUserId).child("request_type")
+        mFriendRequestsRef.child(mSenderId).child(mReceiverUserId).child("request_type")
             .setValue("sent")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    mFriendsRequestRef.child(mReceiverUserId).child(mSenderId).child("request_type")
+                    mFriendRequestsRef.child(mReceiverUserId).child(mSenderId).child("request_type")
                         .setValue("received")
                         .addOnCompleteListener { task1 ->
                             if (task1.isSuccessful) {
@@ -106,10 +104,10 @@ class ProfileFragment : Fragment() {
 
     private fun cancelFriendRequest() {
         Log.d(TAG, "cancelFriendRequest: starts")
-        mFriendsRequestRef.child(mSenderId).child(mReceiverUserId).removeValue()
+        mFriendRequestsRef.child(mSenderId).child(mReceiverUserId).removeValue()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    mFriendsRequestRef.child(mReceiverUserId).child(mSenderId).removeValue()
+                    mFriendRequestsRef.child(mReceiverUserId).child(mSenderId).removeValue()
                         .addOnCompleteListener { task1 ->
                             if (task1.isSuccessful) {
                                 case = NEW
@@ -125,7 +123,7 @@ class ProfileFragment : Fragment() {
         mFriendsRef.child(mSenderId).child(mReceiverUserId).removeValue()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    mFriendsRequestRef.child(mReceiverUserId).child(mSenderId).removeValue()
+                    mFriendRequestsRef.child(mReceiverUserId).child(mSenderId).removeValue()
                         .addOnCompleteListener { task1 ->
                             if (task1.isSuccessful) {
                                 case = NEW
@@ -141,7 +139,7 @@ class ProfileFragment : Fragment() {
     private fun manageClickEvents(){
         Log.d(TAG, "manageClickEvents: starts")
         // fun retrieves needed stuff from db incase user leaves and come back to this fragment
-        mFriendsRequestRef.child(mSenderId).addValueEventListener(object : ValueEventListener {
+        mFriendRequestsRef.child(mSenderId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.hasChild(mReceiverUserId)) { // request has been sent to end user already
                     var requestType =
@@ -196,11 +194,11 @@ class ProfileFragment : Fragment() {
                         .setValue("Saved")
                         .addOnCompleteListener{ task1 ->
                             if (task1.isSuccessful) {
-                                mFriendsRequestRef.child(mSenderId).child(mReceiverUserId)
+                                mFriendRequestsRef.child(mSenderId).child(mReceiverUserId)
                                     .removeValue()
                                     .addOnCompleteListener{ task2 ->
                                         if (task2.isSuccessful) {
-                                            mFriendsRequestRef.child(mReceiverUserId)
+                                            mFriendRequestsRef.child(mReceiverUserId)
                                                 .child(mSenderId).removeValue()
                                                 .addOnCompleteListener{task3->
                                                     if (task3.isSuccessful) {

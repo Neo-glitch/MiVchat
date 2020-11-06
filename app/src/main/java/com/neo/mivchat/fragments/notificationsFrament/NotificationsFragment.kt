@@ -1,7 +1,7 @@
 package com.neo.mivchat.fragments.notificationsFrament
 
 import android.os.Bundle
-import android.text.Layout
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +12,23 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.neo.mivchat.R
-import com.neo.mivchat.fragments.findFriendsFragment.FindFriendsRvViewHolder
 import com.neo.mivchat.model.User
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
 
 class NotificationsFragment : Fragment() {
+    private val TAG = "NotificationsFragment"
     private var mCurrentUserId: String = ""
-    private lateinit var mUsersRef: DatabaseReference
-    private lateinit var mFriendsRequestRef: DatabaseReference
-    private lateinit var mFriendsRef: DatabaseReference
+    private val mUsersRef by lazy {
+        FirebaseDatabase.getInstance().reference.child("users")
+    }
+    private val mFriendRequestsRef by lazy {
+        FirebaseDatabase.getInstance().reference.child("friend_requests")
+    }
+    private val mFriendsRef by lazy {
+        FirebaseDatabase.getInstance().reference.child("friends")
+    }
     private lateinit var mAuth: FirebaseAuth
 
 
@@ -40,9 +45,6 @@ class NotificationsFragment : Fragment() {
 
         mAuth = FirebaseAuth.getInstance()
         mCurrentUserId = mAuth.currentUser?.uid!!
-        mUsersRef = FirebaseDatabase.getInstance().reference.child("users")
-        mFriendsRequestRef = FirebaseDatabase.getInstance().reference.child("Friend Requests")
-        mFriendsRef = FirebaseDatabase.getInstance().reference.child("Friends")
 
         view.rv_notifications.layoutManager = LinearLayoutManager(requireContext())
         return view
@@ -53,11 +55,11 @@ class NotificationsFragment : Fragment() {
         super.onStart()
 
         val options = FirebaseRecyclerOptions.Builder<User>()
-            .setQuery(mFriendsRef.child(mCurrentUserId), User::class.java)
+            .setQuery(mFriendRequestsRef.child(mCurrentUserId), User::class.java)
             .build()
         val firebaseAdapter = initFirebaseRvAdapter(options)
 
-        rv_notifications.adapter = firebaseAdapter
+        view?.rv_notifications?.adapter = firebaseAdapter
         firebaseAdapter.startListening()
     }
 
@@ -87,35 +89,34 @@ class NotificationsFragment : Fragment() {
                         if (snapshot.exists()) {
                             var type = snapshot.value.toString()
                             if (type == "received") {  // received friend requests
+                                holder.itemView.visibility = View.VISIBLE
                                 mUsersRef.child(listUserId)
-                                    .addValueEventListener(object : ValueEventListener {
+                                    .addValueEventListener(object :
+                                        ValueEventListener {   // queries node of user in rv to get needed details
                                         override fun onDataChange(snapshot: DataSnapshot) {
-                                            if (snapshot.hasChild("profile_image")) {
-                                                val imageUrl =
-                                                    snapshot.child("profile_image").value
-                                                        .toString()
-                                                if (imageUrl != "") {
-                                                    Picasso.get().load(imageUrl)
-                                                        .placeholder(R.drawable.profile_image)
-                                                        .into(holder.userImage)
-                                                }
-                                                holder.userName.text =
-                                                    (snapshot.child("name").value.toString())
-                                                holder.addFriendBtn.setOnClickListener {
-                                                    acceptRequest(listUserId)
-                                                }
-                                                holder.cancelFriendBtn.setOnClickListener {
-                                                    declineRequest(listUserId)
-                                                }
-
+                                            val imageUrl =
+                                                snapshot.child("profile_image").value
+                                                    .toString()
+                                            Log.d(TAG, "onDataChange: $imageUrl")
+                                            if (imageUrl != "") {
+                                                Picasso.get().load(imageUrl)
+                                                    .placeholder(R.drawable.profile_image)
+                                                    .into(holder.userImage)
+                                            }
+                                            holder.userName.text =
+                                                (snapshot.child("name").value.toString())
+                                            holder.addFriendBtn.setOnClickListener {
+                                                acceptRequest(listUserId)
+                                            }
+                                            holder.cancelFriendBtn.setOnClickListener {
+                                                declineRequest(listUserId)
                                             }
                                         }
 
                                         override fun onCancelled(error: DatabaseError) {
-                                            TODO("Not yet implemented")
                                         }
                                     })
-                            } else {  // own user, so that shw user in list
+                            } else {  // own user, so don't shw user in list
                                 holder.itemView.visibility = View.GONE
                             }
 
@@ -123,7 +124,6 @@ class NotificationsFragment : Fragment() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
                     }
                 })
 
@@ -141,9 +141,10 @@ class NotificationsFragment : Fragment() {
                         .setValue("saved")
                         .addOnCompleteListener { task1 ->
                             if (task1.isSuccessful) {
-                                mFriendsRef.child(mCurrentUserId).child(listUserId).removeValue()
+                                mFriendRequestsRef.child(mCurrentUserId).child(listUserId)
+                                    .removeValue()
                                     .addOnCompleteListener { task3 ->
-                                        mFriendsRef.child(listUserId).child(mCurrentUserId)
+                                        mFriendRequestsRef.child(listUserId).child(mCurrentUserId)
                                             .removeValue()
                                     }
                             }
@@ -153,10 +154,10 @@ class NotificationsFragment : Fragment() {
     }
 
     private fun declineRequest(listUserId: String) {
-        mFriendsRef.child(mCurrentUserId).child(listUserId).removeValue()
+        mFriendRequestsRef.child(mCurrentUserId).child(listUserId).removeValue()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    mFriendsRef.child(listUserId).child(mCurrentUserId).removeValue()
+                    mFriendRequestsRef.child(listUserId).child(mCurrentUserId).removeValue()
                 }
             }
     }

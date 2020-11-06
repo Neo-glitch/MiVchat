@@ -2,7 +2,8 @@
 <resources>
 <!--    <color name="colorPrimary">#6200EE</color>-->
 <!--    <color name="colorPrimary">#36454F</color>-->
-    <color name="colorPrimary">#0A5E16</color>
+<!--    <color name="colorPrimary">#0A5E16</color>-->
+    <color name="colorPrimary">#078C1A</color>
     <color name="colorPrimaryDark">#023209</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="linkBlue">#4d94ff</color>

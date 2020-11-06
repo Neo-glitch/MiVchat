@@ -6,15 +6,15 @@
         android:id="@+id/homeFragment"
         android:layout_centerVertical="true"
         android:icon="@drawable/ic_home"
-        android:title="" />
+        android:title="Home" />
     <item
         android:id="@+id/findFriendsFragment"
         android:layout_centerVertical="true"
         android:icon="@drawable/find_people"
-        android:title="" />
+        android:title="Find Friends" />
     <item
         android:id="@+id/notificationsFragment"
         android:layout_centerVertical="true"
         android:icon="@drawable/ic_notificaions"
-        android:title="" />
+        android:title="Notifications" />
 </menu>

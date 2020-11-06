@@ -1,19 +1,16 @@
 package com.neo.mivchat
 
+import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
-import com.neo.mivchat.fragments.callFragment.CallFragment
 import com.neo.mivchat.fragments.findFriendsFragment.FindFriendsFragment
 import com.neo.mivchat.fragments.homeFragment.HomeFragment
 import com.neo.mivchat.fragments.notificationsFrament.NotificationsFragment
@@ -42,6 +39,7 @@ class MainActivity : AppCompatActivity(),
     val HOME_FRAGMENT = 0
     val FINDFRIENDS_FRAGMENT = 1
     val NOTIFICATIONS_FRAGMENT = 2
+    val CALLING_ACTIVITY = 9
 
     private val TAG = "MainActivity"
 
@@ -49,7 +47,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var mHomeFragment: HomeFragment
     private lateinit var mFindFriendsFragment: FindFriendsFragment
     private lateinit var mNotificationsFragment: NotificationsFragment
-    private lateinit var mCallFragment: CallFragment
+//    private lateinit var mCallFragment: CallFragment
     private lateinit var mProfileFragment: ProfileFragment
 
     //var
@@ -95,7 +93,6 @@ class MainActivity : AppCompatActivity(),
 
     private fun setupBottomNav() {
         bottom_nav_view.onNavigationItemSelectedListener = this
-        bottom_nav_view.setBackgroundColor(Color.WHITE)
     }
 
     private fun init() {
@@ -121,8 +118,16 @@ class MainActivity : AppCompatActivity(),
     private fun setFragmentVisibility(tagName: String) {
         when(tagName){
             getString(R.string.home_fragment), getString(R.string.find_friends_fragment),
-            getString(R.string.notifications_fragment) -> setBottomNavVisibility(true)
-            getString(R.string.call_fragment), getString(R.string.profile_fragment) -> setBottomNavVisibility(false)
+            getString(R.string.notifications_fragment) -> {
+                toolbar.visibility = View.VISIBLE
+                setBottomNavVisibility(true)}
+//            getString(R.string.call_fragment)-> {
+//                toolbar.visibility = View.VISIBLE
+//                setBottomNavVisibility(false)}
+            getString(R.string.profile_fragment) -> {
+                toolbar.visibility = View.GONE
+                setBottomNavVisibility(false)
+            }
         }
         for (i in mFragments.indices) {
             if (tagName == mFragments[i].tag) {
@@ -306,7 +311,7 @@ class MainActivity : AppCompatActivity(),
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.hasChild("ringing")){  // user has an incoming call
                     mCalledBy = snapshot.child("ringing").value.toString()
-                    inflateCallFragment(mCalledBy)
+                    startCallActivity(mCalledBy)
                 }
             }
 
@@ -318,21 +323,17 @@ class MainActivity : AppCompatActivity(),
 
 
 
-    override fun inflateCallFragment(listUserId: String) {
-        if(::mCallFragment.isInitialized){
-            supportFragmentManager.beginTransaction().remove(mCallFragment).commitAllowingStateLoss()
-        }
-        mCallFragment = CallFragment()
-        var args = Bundle()
-        args.putString(VISIT_USER_ID, VISIT_USER_ID)
-        mCallFragment.arguments = args
+    override fun startCallActivity(listUserId: String) {
+        val intent = Intent(this, CallActivity::class.java)
+        intent.putExtra(VISIT_USER_ID, listUserId)
+        startActivityForResult(intent, CALLING_ACTIVITY)
+    }
 
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.main_activity_frame, mCallFragment, getString(R.string.call_fragment))
-        transaction.commit()
-        mFragmentTags.add(getString(R.string.call_fragment))
-        mFragments.add(FragmentTag(mCallFragment, getString(R.string.call_fragment)))
-        setFragmentVisibility(getString(R.string.call_fragment))
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == CALLING_ACTIVITY && resultCode == Activity.RESULT_OK){
+            startActivity(Intent(this, VideoChatActivity::class.java))
+        }
     }
 
     override fun inflateProfileFragment(

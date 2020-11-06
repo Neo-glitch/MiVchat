@@ -1,7 +1,5 @@
 package com.neo.mivchat.fragments.homeFragment
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,14 +15,17 @@ import com.neo.mivchat.R
 import com.neo.mivchat.model.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.rv_home
 
 
 class HomeFragment : Fragment() {
     //firebase
-    private lateinit var mFriendsRef: DatabaseReference
-    private lateinit var mUsersRef: DatabaseReference
+    private val mFriendsRef by lazy {
+        FirebaseDatabase.getInstance().reference.child("friends")
+    }
+    private val mUsersRef by lazy{
+        FirebaseDatabase.getInstance().reference.child("users")
+    }
     private lateinit var mAuth: FirebaseAuth
 
     // const
@@ -32,7 +33,7 @@ class HomeFragment : Fragment() {
     private lateinit var mCurrentUserId:String
     private lateinit var mUserName: String
     private lateinit var mProfileImageUrl: String
-    private lateinit var mCalledBy:String   // to store info of user calling current user
+//    private lateinit var mCalledBy:String   // to store info of user calling current user
 
     // listener
     private val listener by lazy {
@@ -45,9 +46,8 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        mUsersRef = FirebaseDatabase.getInstance().reference.child("users")
-        mFriendsRef = FirebaseDatabase.getInstance().reference.child("Friends")
-        mCurrentUserId = FirebaseAuth.getInstance().currentUser?.uid!!
+        mAuth = FirebaseAuth.getInstance()
+        mCurrentUserId = mAuth.currentUser?.uid!!
 
         view.rv_home.layoutManager = LinearLayoutManager(requireContext())
 
@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        ifReceivingCall()
+//        ifReceivingCall()
         val options = FirebaseRecyclerOptions.Builder<User>()
             .setQuery(mFriendsRef.child(mCurrentUserId), User::class.java).build()
 
@@ -82,12 +82,12 @@ class HomeFragment : Fragment() {
                             mUserName = snapshot.child("name").value.toString()
                             mProfileImageUrl = snapshot.child("profile_image").value.toString()
                             holder.userName.text = mUserName
-                            if(mProfileImageUrl == ""){
+                            if(mProfileImageUrl != ""){
                                 Picasso.get().load(mProfileImageUrl).placeholder(R.drawable.profile_image).into(holder.userImage)
                             }
 
                             holder.videoCallBtn.setOnClickListener {
-                                listener.inflateCallFragment(listUserId)
+                                listener.startCallActivity(listUserId)
                             }
                         }
                     }
@@ -99,20 +99,20 @@ class HomeFragment : Fragment() {
         }
     }
 
-    // check if user has an incoming call
-    private fun ifReceivingCall() {
-        mUsersRef.child(mCurrentUserId).child("Ringing").addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.hasChild("ringing")){  // user has an incoming call
-                    mCalledBy = snapshot.child("ringing").value.toString()
-                    listener.inflateCallFragment(mCalledBy)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
-    }
+//    // check if user has an incoming call
+//    private fun ifReceivingCall() {
+//        mUsersRef.child(mCurrentUserId).child("Ringing").addValueEventListener(object: ValueEventListener{
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if(snapshot.hasChild("ringing")){  // user has an incoming call
+//                    mCalledBy = snapshot.child("ringing").value.toString()
+//                    listener.inflateCallFragment(mCalledBy)
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//            }
+//        })
+//    }
 
 
 }
