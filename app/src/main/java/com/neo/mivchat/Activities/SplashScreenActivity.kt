@@ -29,7 +29,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             fadeAnimation()
-        }, 900)
+        }, 500)
 
 
         Handler().postDelayed(
@@ -37,7 +37,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 override fun run() {
                     initUser()
                 }
-            }, 3000)
+            }, 1600)
 
 
         // allows us to modify some things in app status bar
@@ -75,12 +75,12 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun fadeAnimation(){
         var fadeAnimatorLogo = ObjectAnimator.ofFloat(app_logo_splash, "alpha", 0.0f, 1.0f)
         fadeAnimatorLogo.apply {
-            duration = 800
+            duration = 450
             start()
         }
         var fadeAnimatorLine = ObjectAnimator.ofFloat(line_divider_splash, "alpha", 0.0f, 1.0f)
         fadeAnimatorLine.apply {
-            duration = 800
+            duration = 450
             start()
         }
         app_logo_splash.visibility = View.VISIBLE
