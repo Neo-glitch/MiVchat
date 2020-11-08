@@ -39,7 +39,7 @@ class FindFriendsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)  // enables fragment to contribute to toolbar and handle
+//        setHasOptionsMenu(true)  // enables fragment to contribute to toolbar and handle
     }
 
 
@@ -57,38 +57,38 @@ class FindFriendsFragment : Fragment() {
         return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_find_friends, menu)
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.menu_find_friends, menu)
+//
+//        var searchItem = menu.findItem(R.id.action_search)
+//        val searchView: SearchView = MenuItemCompat.getActionView(searchItem) as SearchView
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//
+//                searchView.clearFocus()
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+////                if (newText == "") {
+////                    return true
+////                } else {
+////                    str += newText
+////                    onStart()
+////                }
+//                return false
+//            }
+//        })
+//    }
 
-        var searchItem = menu.findItem(R.id.action_search)
-        val searchView: SearchView = MenuItemCompat.getActionView(searchItem) as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-
-                searchView.clearFocus()
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-//                if (newText == "") {
-//                    return true
-//                } else {
-//                    str += newText
-//                    onStart()
-//                }
-                return false
-            }
-        })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_search -> {
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.action_search -> {
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
