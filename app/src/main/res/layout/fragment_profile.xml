@@ -23,11 +23,12 @@
             android:layout_height="match_parent"
             android:alpha="0.05"
             android:scaleType="centerCrop"
-            android:src="@drawable/simeone_panda"
+            android:src="@drawable/profile_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/simeone_panda" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -38,11 +39,11 @@
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_marginTop="164dp"
-                android:src="@drawable/simeone_panda_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/simeone_panda_1" />
 
             <Button
                 android:id="@+id/btn_add_friend"
@@ -87,7 +88,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="sans-serif-condensed-light"
-                android:text="Stay Jiggy and stay woke"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textColor="#FFFFFF"
@@ -96,7 +96,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/user_name_profile"
                 app:layout_constraintStart_toStartOf="@+id/user_name_profile"
                 app:layout_constraintTop_toBottomOf="@+id/user_name_profile"
-                tools:text="Just your plain old jiggy manmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmnnnnnnnnnhgggggghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhghhhhhhhhhhhhhgutyyttutututuggghjjdjdjkskskskhghghvnvntnututtthghghghghghghghghg" />
+                tools:text="stay happy" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

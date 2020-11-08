@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +25,7 @@ class ProfileFragment : Fragment() {
     val VISIT_USER_ID = "visit_user_id"
     val VISIT_PROFILE_IMAGE = "profile_image"
     val VISIT_PROFILE_NAME = "profile_name"
+    val VISIT_USER_BIO = "user_bio"
     val SENT = "sent"
     val ACCEPTED = "accepted"
     val RECIEVED = "recieved"
@@ -32,16 +35,14 @@ class ProfileFragment : Fragment() {
     private lateinit var mReceiverUserId: String  // receiver of friendsRequest
     private lateinit var mReceiverUserImage: String
     private lateinit var  mReceiverUserName: String
+    private lateinit var mReceiverBio: String
+
     private val mSenderId by lazy {
         mAuth.currentUser?.uid!!
     }  // my own id(currentUser), used to send friendReq
-    private val calledBy = "" // to hold info of user calling currentUser
     private var case = NEW
 
-    // firebase
-    private val mUsersRef by lazy {
-        FirebaseDatabase.getInstance().reference.child("users")
-    }
+
     private val mFriendsRef by lazy {
         FirebaseDatabase.getInstance().reference.child("friends")
     }
@@ -59,6 +60,7 @@ class ProfileFragment : Fragment() {
         mReceiverUserId = bundle?.getString(VISIT_USER_ID)!!
         mReceiverUserImage = bundle.getString(VISIT_PROFILE_IMAGE)!!
         mReceiverUserName = bundle.getString(VISIT_PROFILE_NAME)!!
+        mReceiverBio = bundle.getString(VISIT_USER_BIO)!!
 
     }
 
@@ -67,15 +69,14 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var view = inflater.inflate(R.layout.fragment_profile, container, false)
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         if(mReceiverUserImage != ""){
             Picasso.get().load(mReceiverUserImage).placeholder(R.drawable.profile_image).into(view.user_image_profile)
             Picasso.get().load(mReceiverUserImage).placeholder(R.drawable.profile_image).into(view.user_image_profile_small)
         }
         view.user_name_profile.text = mReceiverUserName
-
-        manageClickEvents()
+        view.user_bio_profile.text = mReceiverBio
         return view
     }
 
@@ -147,8 +148,6 @@ class ProfileFragment : Fragment() {
                     if (requestType == "sent") {
                         case = SENT
                         view?.btn_add_friend?.text = "Cancel Request"
-//                        btn_add_friend.background = getDrawable(requireContext(), R.drawable.btn_decline_style)
-//                        btn_add_friend.setTextColor(Color.BLACK)
                     }
                 } else {  // request has been accepted by user already or not sent yet
                     mFriendsRef.child(mSenderId)

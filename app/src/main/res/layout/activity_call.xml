@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent"
-    tools:context=".CallActivity">
+    tools:context=".Activities.CallActivity.CallActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -28,11 +28,11 @@
                 android:layout_width="300dp"
                 android:layout_height="400dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/simeone_panda_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/simeone_panda_1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

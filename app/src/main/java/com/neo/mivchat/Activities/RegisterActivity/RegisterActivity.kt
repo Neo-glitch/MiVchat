@@ -1,4 +1,4 @@
-package com.neo.mivchat
+package com.neo.mivchat.Activities.RegisterActivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,8 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import com.neo.mivchat.Activities.LoginActivity.LoginActivity
+import com.neo.mivchat.R
 import com.neo.mivchat.model.User
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {

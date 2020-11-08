@@ -1,4 +1,4 @@
-package com.neo.mivchat
+package com.neo.mivchat.Activities.VideoChatActivity
 
 import android.Manifest
 import android.opengl.GLSurfaceView
@@ -9,6 +9,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.neo.mivchat.R
 import com.opentok.android.*
 import kotlinx.android.synthetic.main.activity_video_chat.*
 import pub.devrel.easypermissions.AfterPermissionGranted

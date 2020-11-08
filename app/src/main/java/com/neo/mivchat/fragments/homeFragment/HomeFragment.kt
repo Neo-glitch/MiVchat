@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -19,25 +21,13 @@ import kotlinx.android.synthetic.main.fragment_home.view.rv_home
 
 
 class HomeFragment : Fragment() {
-    //firebase
-    private val mFriendsRef by lazy {
-        FirebaseDatabase.getInstance().reference.child("friends")
+
+    private val mViewModel by lazy {
+        ViewModelProviders.of(this, defaultViewModelProviderFactory)[HomeFragmentViewModel::class.java]
+//        ViewModelProvider(viewModelStore, ViewModelProvider.NewInstanceFactory())[HomeFragmentViewModel::class.java]
     }
-    private val mUsersRef by lazy{
-        FirebaseDatabase.getInstance().reference.child("users")
-    }
-    private lateinit var mAuth: FirebaseAuth
-
-    // const
-
-    private lateinit var mCurrentUserId:String
-    private lateinit var mUserName: String
-    private lateinit var mProfileImageUrl: String
-//    private lateinit var mCalledBy:String   // to store info of user calling current user
-
-    // listener
-    private val listener by lazy {
-        requireActivity() as IMainActivity
+    private val mFirebaseAdapter by lazy {
+        mViewModel.initAdapter(requireContext())
     }
 
     override fun onCreateView(
@@ -45,74 +35,17 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-
-        mAuth = FirebaseAuth.getInstance()
-        mCurrentUserId = mAuth.currentUser?.uid!!
-
         view.rv_home.layoutManager = LinearLayoutManager(requireContext())
+
+        view.rv_home.adapter = mFirebaseAdapter
 
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-
-//        ifReceivingCall()
-        val options = FirebaseRecyclerOptions.Builder<User>()
-            .setQuery(mFriendsRef.child(mCurrentUserId), User::class.java).build()
-
-        val firebaseAdapter = initFirebaseAdapter(options)
-        rv_home.adapter = firebaseAdapter
-        firebaseAdapter.startListening()
+    override fun onDestroy() {
+        super.onDestroy()
+        mFirebaseAdapter.stopListening()
     }
-
-    private fun initFirebaseAdapter(options: FirebaseRecyclerOptions<User>): FirebaseRecyclerAdapter<User, HomeRvViewHolder >{
-        return object : FirebaseRecyclerAdapter<User, HomeRvViewHolder>(options){
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRvViewHolder {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home, parent, false)
-                return HomeRvViewHolder(view)
-            }
-
-            override fun onBindViewHolder(holder: HomeRvViewHolder, position: Int, model: User) {
-                val listUserId = getRef(position).key!!   // id of each user in rv list
-
-                mUsersRef.child(listUserId).addValueEventListener(object : ValueEventListener{  // to get info of user in rv list and work
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if(snapshot.exists()){
-                            mUserName = snapshot.child("name").value.toString()
-                            mProfileImageUrl = snapshot.child("profile_image").value.toString()
-                            holder.userName.text = mUserName
-                            if(mProfileImageUrl != ""){
-                                Picasso.get().load(mProfileImageUrl).placeholder(R.drawable.profile_image).into(holder.userImage)
-                            }
-
-                            holder.videoCallBtn.setOnClickListener {
-                                listener.startCallActivity(listUserId)
-                            }
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-                })
-            }
-        }
-    }
-
-//    // check if user has an incoming call
-//    private fun ifReceivingCall() {
-//        mUsersRef.child(mCurrentUserId).child("Ringing").addValueEventListener(object: ValueEventListener{
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                if(snapshot.hasChild("ringing")){  // user has an incoming call
-//                    mCalledBy = snapshot.child("ringing").value.toString()
-//                    listener.inflateCallFragment(mCalledBy)
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//            }
-//        })
-//    }
 
 
 }

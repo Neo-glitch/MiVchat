@@ -1,4 +1,4 @@
-package com.neo.mivchat
+package com.neo.mivchat.Activities.mainActivity
 
 import android.app.Activity
 import android.content.Intent
@@ -8,15 +8,23 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.neo.mivchat.*
+import com.neo.mivchat.Activities.CallActivity.CallActivity
+import com.neo.mivchat.Activities.LoginActivity.LoginActivity
+import com.neo.mivchat.Activities.VideoChatActivity.VideoChatActivity
+import com.neo.mivchat.R
+import com.neo.mivchat.fragments.accountFragment.AccountFragment
 import com.neo.mivchat.fragments.findFriendsFragment.FindFriendsFragment
 import com.neo.mivchat.fragments.homeFragment.HomeFragment
 import com.neo.mivchat.fragments.notificationsFrament.NotificationsFragment
 import com.neo.mivchat.fragments.profileFragment.ProfileFragment
 import com.neo.mivchat.model.FragmentTag
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_account.*
 
 
 class MainActivity : AppCompatActivity(),
@@ -25,17 +33,20 @@ class MainActivity : AppCompatActivity(),
 
     // firebase
     private lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
+
+    private lateinit var mViewModel: MainActivityViewModel
+
     //firebase
     private lateinit var mFriendsRef: DatabaseReference
     private lateinit var mUsersRef: DatabaseReference
-    private val mAuth by lazy {
-        FirebaseAuth.getInstance()
-    }
+    private lateinit var mCurrentUserId: String
+
 
     // const
     val VISIT_USER_ID = "visit_user_id"
     val VISIT_PROFILE_IMAGE = "profile_image"
     val VISIT_PROFILE_NAME = "profile_name"
+    val VISIT_USER_BIO = "user_bio"
     val HOME_FRAGMENT = 0
     val FINDFRIENDS_FRAGMENT = 1
     val NOTIFICATIONS_FRAGMENT = 2
@@ -47,28 +58,25 @@ class MainActivity : AppCompatActivity(),
     private lateinit var mHomeFragment: HomeFragment
     private lateinit var mFindFriendsFragment: FindFriendsFragment
     private lateinit var mNotificationsFragment: NotificationsFragment
-//    private lateinit var mCallFragment: CallFragment
     private lateinit var mProfileFragment: ProfileFragment
-
-    //var
-    private var mFragmentTags: MutableList<String> = mutableListOf()
-    private var mFragments: MutableList<FragmentTag> = mutableListOf()
-    private lateinit var mCurrentUserId:String
-    private lateinit var mCalledBy:String   // to store info of user calling current user
+    private lateinit var mAccountFragment: AccountFragment
+    private lateinit var mCalledBy: String   // to store info of user calling current user
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mUsersRef = FirebaseDatabase.getInstance().reference.child("users")
-        mFriendsRef = FirebaseDatabase.getInstance().reference.child("Friends")
-        mCurrentUserId = FirebaseAuth.getInstance().currentUser?.uid!!
+        mViewModel = ViewModelProvider(viewModelStore, ViewModelProvider.NewInstanceFactory())[MainActivityViewModel::class.java]
+
+        mUsersRef = mViewModel.mUsersRef
+        mFriendsRef = mViewModel.mFriendsRef
+        mCurrentUserId = mViewModel.mCurrentUserId
 
         initToolbar()
         setupFirebaseAuth()
         ifReceivingCall()
         setupBottomNav()
-        init()
+        init(mViewModel.bottomNavDisplaySelection)
     }
 
     private fun initToolbar() {
@@ -82,61 +90,161 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.action_settings -> true
+        return when (item.itemId) {
+            R.id.action_account -> {
+                inflateAccountFragment()
+                true
+            }
             R.id.action_logout -> {
                 FirebaseAuth.getInstance().signOut()
                 true
-            } else -> super.onOptionsItemSelected(item)
+            }
+            else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun inflateAccountFragment() {
+        if (::mAccountFragment.isInitialized) {
+            supportFragmentManager.beginTransaction().remove(mAccountFragment)
+                .commitAllowingStateLoss()
+        }
+        mAccountFragment =
+            AccountFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(
+            R.id.main_activity_frame, mAccountFragment, getString(
+                R.string.account_fragment
+            )
+        )
+        transaction.commit()
+        mViewModel.mFragmentTags.add(getString(R.string.account_fragment))
+        mViewModel.mFragments.add(
+            FragmentTag(
+                mAccountFragment,
+                getString(R.string.account_fragment)
+            )
+        )
+        setFragmentVisibility(getString(R.string.account_fragment))
+
     }
 
     private fun setupBottomNav() {
         bottom_nav_view.onNavigationItemSelectedListener = this
     }
 
-    private fun init() {
-        if (!::mHomeFragment.isInitialized) {
-            mHomeFragment = HomeFragment()
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(
-                R.id.main_activity_frame,
-                mHomeFragment,
-                getString(R.string.home_fragment)
-            )
-            transaction.commit()
-            mFragmentTags.add(getString(R.string.home_fragment))
-            mFragments.add(FragmentTag(mHomeFragment, getString(R.string.home_fragment)))
-        } else {
-            mFragmentTags.remove(getString(R.string.home_fragment))
-            mFragments.remove(FragmentTag(mHomeFragment, getString(R.string.home_fragment)))
+    private fun init(itemId: Int) {
+        if (itemId == R.id.homeFragment) {
+            if (!::mHomeFragment.isInitialized) {
+                mHomeFragment = HomeFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.add(
+                    R.id.main_activity_frame,
+                    mHomeFragment,
+                    getString(R.string.home_fragment)
+                )
+                transaction.commit()
+                mViewModel.mFragmentTags.add(getString(R.string.home_fragment))
+                mViewModel.mFragments.add(
+                    FragmentTag(
+                        mHomeFragment,
+                        getString(R.string.home_fragment)
+                    )
+                )
+            } else {
+                mViewModel.mFragmentTags.remove(getString(R.string.home_fragment))
+                mViewModel.mFragments.remove(
+                    FragmentTag(
+                        mHomeFragment,
+                        getString(R.string.home_fragment)
+                    )
+                )
+            }
+            setFragmentVisibility(getString(R.string.home_fragment))
+        } else if (itemId == R.id.findFriendsFragment) {
+            if (!::mFindFriendsFragment.isInitialized) {
+                mFindFriendsFragment = FindFriendsFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.add(
+                    R.id.main_activity_frame,
+                    mFindFriendsFragment,
+                    getString(R.string.find_friends_fragment)
+                )
+                transaction.commit()
+                mViewModel.mFragmentTags.add(getString(R.string.find_friends_fragment))
+                mViewModel.mFragments.add(
+                    FragmentTag(
+                        mFindFriendsFragment,
+                        getString(R.string.find_friends_fragment)
+                    )
+                )
+            } else {
+                mViewModel.mFragmentTags.remove(getString(R.string.find_friends_fragment))
+                mViewModel.mFragments.remove(
+                    FragmentTag(
+                        mFindFriendsFragment,
+                        getString(R.string.find_friends_fragment)
+                    )
+                )
+            }
+            setFragmentVisibility(getString(R.string.find_friends_fragment))
+        } else if (itemId == R.id.notificationsFragment) {
+            if (!::mNotificationsFragment.isInitialized) {
+                mNotificationsFragment = NotificationsFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.add(
+                    R.id.main_activity_frame,
+                    mNotificationsFragment,
+                    getString(R.string.notifications_fragment)
+                )
+                transaction.commit()
+                mViewModel.mFragmentTags.add(getString(R.string.notifications_fragment))
+                mViewModel.mFragments.add(
+                    FragmentTag(
+                        mNotificationsFragment,
+                        getString(R.string.notifications_fragment)
+                    )
+                )
+            } else {
+                mViewModel.mFragmentTags.remove(getString(R.string.notifications_fragment))
+                mViewModel.mFragments.remove(
+                    FragmentTag(
+                        mNotificationsFragment,
+                        getString(R.string.notifications_fragment)
+                    )
+                )
+            }
+            setFragmentVisibility(getString(R.string.notifications_fragment))
         }
-        setFragmentVisibility(getString(R.string.home_fragment))
-
     }
 
     private fun setFragmentVisibility(tagName: String) {
-        when(tagName){
-            getString(R.string.home_fragment), getString(R.string.find_friends_fragment),
+        when (tagName) {
+            getString(R.string.home_fragment), getString(
+                R.string.find_friends_fragment
+            ),
             getString(R.string.notifications_fragment) -> {
                 toolbar.visibility = View.VISIBLE
-                setBottomNavVisibility(true)}
+                setBottomNavVisibility(true)
+            }
 //            getString(R.string.call_fragment)-> {
 //                toolbar.visibility = View.VISIBLE
 //                setBottomNavVisibility(false)}
-            getString(R.string.profile_fragment) -> {
+            getString(R.string.profile_fragment), getString(
+                R.string.account_fragment
+            ) -> {
                 toolbar.visibility = View.GONE
+                setSupportActionBar(toolbar_account)
                 setBottomNavVisibility(false)
             }
         }
-        for (i in mFragments.indices) {
-            if (tagName == mFragments[i].tag) {
+        for (i in mViewModel.mFragments.indices) {
+            if (tagName == mViewModel.mFragments[i].tag) {
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.show(mFragments[i].fragment!!)
+                transaction.show(mViewModel.mFragments[i].fragment!!)
                 transaction.commit()
             } else {
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.hide(mFragments[i].fragment!!)
+                transaction.hide(mViewModel.mFragments[i].fragment!!)
                 transaction.commit()
             }
         }
@@ -164,15 +272,15 @@ class MainActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         // remove fragment at top and show the one directly below it.. but check if there's another fragment below top
-        val backStackCount = mFragmentTags.size
+        val backStackCount = mViewModel.mFragmentTags.size
         Log.d(TAG, "onBackPressed: $backStackCount")
         if (backStackCount > 1) { // true if fragment is after fragment in focus
-            var topFragmentTag = mFragmentTags[backStackCount - 1]
+            var topFragmentTag = mViewModel.mFragmentTags[backStackCount - 1]
 
             // logic makes fragment after topFragment to now be in view, and removes old fragment from stack
-            val newTopFragmentTag = mFragmentTags.get(backStackCount - 2)
+            val newTopFragmentTag = mViewModel.mFragmentTags.get(backStackCount - 2)
             setFragmentVisibility(newTopFragmentTag)
-            mFragmentTags.remove(topFragmentTag)
+            mViewModel.mFragmentTags.remove(topFragmentTag)
         } else if (backStackCount == 1) {
             super.onBackPressed()
         }
@@ -188,7 +296,6 @@ class MainActivity : AppCompatActivity(),
      */
     private fun checkAuthState() {
         val user = FirebaseAuth.getInstance().currentUser
-
         if (user == null) {
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -202,7 +309,6 @@ class MainActivity : AppCompatActivity(),
     private fun setupFirebaseAuth() {
         mAuthStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
             val user = firebaseAuth.currentUser
-
             if (user == null) {
                 // user not authenticated
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
@@ -211,6 +317,7 @@ class MainActivity : AppCompatActivity(),
                 finish()
             }
         }
+
     }
     ///////////////////////////////////////
 
@@ -238,14 +345,20 @@ class MainActivity : AppCompatActivity(),
                         getString(R.string.home_fragment)
                     )
                     transaction.commit()
-                    mFragmentTags.add(getString(R.string.home_fragment))
-                    mFragments.add(FragmentTag(mHomeFragment, getString(R.string.home_fragment)))
+                    mViewModel.mFragmentTags.add(getString(R.string.home_fragment))
+                    mViewModel.mFragments.add(
+                        FragmentTag(
+                            mHomeFragment,
+                            getString(R.string.home_fragment)
+                        )
+                    )
                 } else {
-                    mFragmentTags.remove(getString(R.string.home_fragment))
-                    mFragmentTags.add(getString(R.string.home_fragment))
+                    mViewModel.mFragmentTags.remove(getString(R.string.home_fragment))
+                    mViewModel.mFragmentTags.add(getString(R.string.home_fragment))
                 }
                 setFragmentVisibility(getString(R.string.home_fragment))
                 item.isChecked = true
+                mViewModel.bottomNavDisplaySelection = item.itemId
                 return true
             }
             R.id.findFriendsFragment -> {
@@ -259,19 +372,20 @@ class MainActivity : AppCompatActivity(),
                         getString(R.string.find_friends_fragment)
                     )
                     transaction.commit()
-                    mFragmentTags.add(getString(R.string.find_friends_fragment))
-                    mFragments.add(
+                    mViewModel.mFragmentTags.add(getString(R.string.find_friends_fragment))
+                    mViewModel.mFragments.add(
                         FragmentTag(
                             mFindFriendsFragment,
                             getString(R.string.find_friends_fragment)
                         )
                     )
                 } else {
-                    mFragmentTags.remove(getString(R.string.find_friends_fragment))
-                    mFragmentTags.add(getString(R.string.find_friends_fragment))
+                    mViewModel.mFragmentTags.remove(getString(R.string.find_friends_fragment))
+                    mViewModel.mFragmentTags.add(getString(R.string.find_friends_fragment))
                 }
                 setFragmentVisibility(getString(R.string.find_friends_fragment))
                 item.isChecked = true
+                mViewModel.bottomNavDisplaySelection = item.itemId
                 return true
             }
             R.id.notificationsFragment -> {
@@ -285,19 +399,20 @@ class MainActivity : AppCompatActivity(),
                         getString(R.string.notifications_fragment)
                     )
                     transaction.commit()
-                    mFragmentTags.add(getString(R.string.notifications_fragment))
-                    mFragments.add(
+                    mViewModel.mFragmentTags.add(getString(R.string.notifications_fragment))
+                    mViewModel.mFragments.add(
                         FragmentTag(
                             mNotificationsFragment,
                             getString(R.string.notifications_fragment)
                         )
                     )
                 } else {
-                    mFragmentTags.remove(getString(R.string.notifications_fragment))
-                    mFragmentTags.add(getString(R.string.notifications_fragment))
+                    mViewModel.mFragmentTags.remove(getString(R.string.notifications_fragment))
+                    mViewModel.mFragmentTags.add(getString(R.string.notifications_fragment))
                 }
                 setFragmentVisibility(getString(R.string.notifications_fragment))
                 item.isChecked = true
+                mViewModel.bottomNavDisplaySelection = item.itemId
                 return true
             }
         }
@@ -306,10 +421,10 @@ class MainActivity : AppCompatActivity(),
 
     // check if user has an incoming call
     private fun ifReceivingCall() {
-        mUsersRef.child(mCurrentUserId).child("Ringing").addValueEventListener(object:
+        mUsersRef.child(mCurrentUserId).child("Ringing").addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.hasChild("ringing")){  // user has an incoming call
+                if (snapshot.hasChild("ringing")) {  // user has an incoming call
                     mCalledBy = snapshot.child("ringing").value.toString()
                     startCallActivity(mCalledBy)
                 }
@@ -321,8 +436,6 @@ class MainActivity : AppCompatActivity(),
     }
 
 
-
-
     override fun startCallActivity(listUserId: String) {
         val intent = Intent(this, CallActivity::class.java)
         intent.putExtra(VISIT_USER_ID, listUserId)
@@ -331,7 +444,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == CALLING_ACTIVITY && resultCode == Activity.RESULT_OK){
+        if (requestCode == CALLING_ACTIVITY && resultCode == Activity.RESULT_OK) {
             startActivity(Intent(this, VideoChatActivity::class.java))
         }
     }
@@ -339,10 +452,12 @@ class MainActivity : AppCompatActivity(),
     override fun inflateProfileFragment(
         receiverUserId: String,
         receiverUserImage: String,
-        receiverUserName: String
+        receiverUserName: String,
+        receiverUserBio: String
     ) {
-        if(::mProfileFragment.isInitialized){
-            supportFragmentManager.beginTransaction().remove(mProfileFragment).commitAllowingStateLoss()
+        if (::mProfileFragment.isInitialized) {
+            supportFragmentManager.beginTransaction().remove(mProfileFragment)
+                .commitAllowingStateLoss()
         }
         mProfileFragment =
             ProfileFragment()
@@ -350,13 +465,23 @@ class MainActivity : AppCompatActivity(),
         args.putString(VISIT_USER_ID, receiverUserId)
         args.putString(VISIT_PROFILE_IMAGE, receiverUserImage)
         args.putString(VISIT_PROFILE_NAME, receiverUserName)
+        args.putString(VISIT_USER_BIO, receiverUserBio)
         mProfileFragment.arguments = args
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.main_activity_frame, mProfileFragment, getString(R.string.profile_fragment))
+        transaction.add(
+            R.id.main_activity_frame,
+            mProfileFragment,
+            getString(R.string.profile_fragment)
+        )
         transaction.commit()
-        mFragmentTags.add(getString(R.string.profile_fragment))
-        mFragments.add(FragmentTag(mProfileFragment, getString(R.string.profile_fragment)))
+        mViewModel.mFragmentTags.add(getString(R.string.profile_fragment))
+        mViewModel.mFragments.add(
+            FragmentTag(
+                mProfileFragment,
+                getString(R.string.profile_fragment)
+            )
+        )
         setFragmentVisibility(getString(R.string.profile_fragment))
     }
 }

@@ -1,4 +1,4 @@
-package com.neo.mivchat
+package com.neo.mivchat.Activities.LoginActivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.neo.mivchat.Activities.mainActivity.MainActivity
+import com.neo.mivchat.PasswordResetDialog
+import com.neo.mivchat.R
+import com.neo.mivchat.Activities.RegisterActivity.RegisterActivity
+import com.neo.mivchat.ResendEmailVerificationDialog
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -16,10 +21,20 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var email: String
     private lateinit var password: String
 
+    // widget
+    private val mWindow by lazy {
+        window
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // test
+        mWindow.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
 
         setupFirebaseAuth()
         init()

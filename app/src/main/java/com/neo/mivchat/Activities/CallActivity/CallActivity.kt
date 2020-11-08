@@ -1,15 +1,17 @@
-package com.neo.mivchat
+package com.neo.mivchat.Activities.CallActivity
 
 import android.app.Activity
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.neo.mivchat.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_call.*
 import java.util.HashMap
@@ -136,14 +138,14 @@ class CallActivity : AppCompatActivity() {
                         snapshot.child(mReceiverUserId).child("profile_image").value.toString()
                     mReceiverUserName =
                         snapshot.child(mReceiverUserId).child("name").value.toString()
-
+                    Log.d(TAG, "onDataChange: $mReceiverUserName")
                     name_calling.text = mReceiverUserName
                     if (mReceiverUserImage != "") {
                         Picasso.get().load(mReceiverUserImage).placeholder(R.drawable.profile_image)
                             .into(profile_image_calling)
                     }
                 }
-                if (snapshot.hasChild(mSenderUserId)) {  // updates ui on calleeScreen
+                else if (snapshot.hasChild(mSenderUserId)) {  // updates ui on calleeScreen
                     mSenderUserImage =
                         snapshot.child(mSenderUserId).child("profile_image").value.toString()
                     mSenderUserName = snapshot.child(mSenderUserId).child("name").value.toString()
