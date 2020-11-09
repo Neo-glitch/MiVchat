@@ -33,14 +33,10 @@ class MainActivity : AppCompatActivity(),
 
     // firebase
     private lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
-
     private lateinit var mViewModel: MainActivityViewModel
-
-    //firebase
     private lateinit var mFriendsRef: DatabaseReference
     private lateinit var mUsersRef: DatabaseReference
     private lateinit var mCurrentUserId: String
-
 
     // const
     val VISIT_USER_ID = "visit_user_id"
@@ -51,7 +47,6 @@ class MainActivity : AppCompatActivity(),
     val FINDFRIENDS_FRAGMENT = 1
     val NOTIFICATIONS_FRAGMENT = 2
     val CALLING_ACTIVITY = 9
-
     private val TAG = "MainActivity"
 
     // fragments
@@ -61,6 +56,8 @@ class MainActivity : AppCompatActivity(),
     private lateinit var mProfileFragment: ProfileFragment
     private lateinit var mAccountFragment: AccountFragment
     private lateinit var mCalledBy: String   // to store info of user calling current user
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -446,6 +443,7 @@ class MainActivity : AppCompatActivity(),
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CALLING_ACTIVITY && resultCode == Activity.RESULT_OK) {
             startActivity(Intent(this, VideoChatActivity::class.java))
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
         }
     }
 
@@ -475,6 +473,7 @@ class MainActivity : AppCompatActivity(),
             getString(R.string.profile_fragment)
         )
         transaction.commit()
+
         mViewModel.mFragmentTags.add(getString(R.string.profile_fragment))
         mViewModel.mFragments.add(
             FragmentTag(

@@ -11,7 +11,7 @@
         android:id="@+id/line_divider_splash"
         android:layout_width="0dp"
         android:layout_height="4dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="287dp"
@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="invisible"
+        android:visibility="visible"
         android:id="@+id/app_logo_splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
