@@ -86,13 +86,13 @@ class CallActivity : AppCompatActivity() {
                     // callee id
                     mCallingId = snapshot.child("calling").value.toString()
                     mUsersRef.child(mCallingId).child("Ringing").removeValue().addOnCompleteListener {task ->
-                        if(task.isSuccessful){
+//                        if(task.isSuccessful){
                             mUsersRef.child(mSenderUserId).child("Calling").removeValue().addOnCompleteListener { task1 ->
                                 if(task.isSuccessful){
                                     finish()
                                 }
                             }
-                        }
+//                        }
                     }
                 } else{ // receiver cancels first
                     finish()
@@ -113,11 +113,11 @@ class CallActivity : AppCompatActivity() {
                     mRingingId = snapshot.child("ringing").value.toString()
 
                     mUsersRef.child(mRingingId).child("Calling").removeValue().addOnCompleteListener { task ->
-                        if(task.isSuccessful){
+//                        if(task.isSuccessful){
                             mUsersRef.child(mSenderUserId).child("Ringing").removeValue().addOnCompleteListener { task1 ->
                                 finish()
                             }
-                        }
+//                        }
                     }
                 }
             }
