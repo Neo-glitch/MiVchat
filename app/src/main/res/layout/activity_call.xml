@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent"
-    tools:context=".Activities.CallActivity.CallActivity">
+    tools:context=".ui.Activities.CallActivity.CallActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

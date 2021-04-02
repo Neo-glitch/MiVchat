@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".Activities.VideoChatActivity.VideoChatActivity">
+    tools:context=".ui.Activities.VideoChatActivity.VideoChatActivity">
 
     <FrameLayout
         android:id="@+id/publisher_container"

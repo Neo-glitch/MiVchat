@@ -13,7 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.LaunchActivity"
+        <activity android:name=".ui.Activities.ProfileActivity.ProfileActivity"></activity>
+        <activity
+            android:name=".ui.Activities.AccountActivity.AccountActivity"
+            android:parentActivityName=".ui.Activities.mainActivity.MainActivity" />
+        <activity
+            android:name=".ui.Activities.LaunchActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,23 +27,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.SplashScreenActivity"
+            android:name=".ui.Activities.SplashScreenActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/LoginTheme">
-        </activity>
+            android:theme="@style/LoginTheme" />
         <activity
-            android:name=".Activities.CallActivity.CallActivity"
+            android:name=".ui.Activities.CallActivity.CallActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.VideoChatActivity.VideoChatActivity" />
+        <activity android:name=".ui.Activities.VideoChatActivity.VideoChatActivity" />
         <activity
-            android:name=".Activities.LoginActivity.LoginActivity"
+            android:name=".ui.Activities.LoginActivity.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/LoginTheme"></activity>
+            android:theme="@style/LoginTheme" />
         <activity
-            android:name=".Activities.RegisterActivity.RegisterActivity"
+            android:name=".ui.Activities.RegisterActivity.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.mainActivity.MainActivity"
+            android:name=".ui.Activities.mainActivity.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
     </application>
