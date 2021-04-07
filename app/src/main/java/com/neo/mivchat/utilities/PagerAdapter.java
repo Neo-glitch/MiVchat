@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.neo.mivchat.ui.fragments.findFriendsFragment.FindFriendsFragment;
-import com.neo.mivchat.ui.fragments.homeFragment.HomeFragment;
+import com.neo.mivchat.ui.fragments.friendsFragment.FriendsFragment;
 import com.neo.mivchat.ui.fragments.notificationsFrament.NotificationsFragment;
 
 
@@ -21,7 +21,7 @@ public class PagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 0: {
-                return new HomeFragment();
+                return new FriendsFragment();
             }
             case 1: {
                 return new FindFriendsFragment();

@@ -13,12 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.Activities.ProfileActivity.ProfileActivity"></activity>
+        <activity android:name=".ui.activities.ProfileActivity.ProfileActivity"></activity>
         <activity
-            android:name=".ui.Activities.AccountActivity.AccountActivity"
-            android:parentActivityName=".ui.Activities.mainActivity.MainActivity" />
+            android:name=".ui.activities.AccountActivity.AccountActivity"
+            android:parentActivityName=".ui.activities.mainActivity.MainActivity" />
         <activity
-            android:name=".ui.Activities.LaunchActivity"
+            android:name=".ui.activities.LaunchActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,24 +27,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.Activities.SplashScreenActivity"
+            android:name=".ui.activities.SplashScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".ui.Activities.CallActivity.CallActivity"
+            android:name=".ui.activities.CallActivity.CallActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.Activities.VideoChatActivity.VideoChatActivity" />
+        <activity android:name=".ui.activities.VideoChatActivity.VideoChatActivity" />
         <activity
-            android:name=".ui.Activities.LoginActivity.LoginActivity"
+            android:name=".ui.activities.LoginActivity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".ui.Activities.RegisterActivity.RegisterActivity"
+            android:name=".ui.activities.RegisterActivity.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Activities.mainActivity.MainActivity"
+            android:name=".ui.activities.mainActivity.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

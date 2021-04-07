@@ -2,37 +2,26 @@ package com.neo.mivchat.ui.fragments.findFriendsFragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import android.widget.Filter
-import android.widget.Filterable
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuItemCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.neo.mivchat.IMainActivity
 import com.neo.mivchat.R
-import com.neo.mivchat.model.User
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_find_friends.*
-import kotlinx.android.synthetic.main.fragment_find_friends.view.*
-import kotlinx.android.synthetic.main.fragment_find_friends.view.rv_find_friends
-import okhttp3.internal.Internal.instance
+import com.neo.mivchat.databinding.FragmentFindFriendsBinding
 
 
 class FindFriendsFragment : Fragment() {
     // const
     private val TAG = "FindFriendsFragment"
-
-    private lateinit var mFirebaseAdapter: FirebaseRecyclerAdapter<User, FindFriendsRvViewHolder>
     private val mViewModel by lazy {
-        ViewModelProviders.of(this, defaultViewModelProviderFactory)[FindFriendsFragmentViewModel::class.java]
+        ViewModelProvider(this)[FindFriendsFragmentViewModel::class.java]
     }
+    private lateinit var binding: FragmentFindFriendsBinding
+
 
     // var
     private var str = ""
@@ -48,13 +37,27 @@ class FindFriendsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d(TAG, "onCreateView: starts")
-        val view = inflater.inflate(R.layout.fragment_find_friends, container, false)
-        view.rv_find_friends.layoutManager = LinearLayoutManager(requireContext())
-
-        mFirebaseAdapter = mViewModel.initAdapter(requireContext())
-        view.rv_find_friends.adapter = mFirebaseAdapter
-
+        binding = FragmentFindFriendsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        mViewModel.getAllUsersFromFirebaseAndUpdateDb()
+        initRecyclerView()
         return view
+    }
+
+    private fun initRecyclerView() {
+        val adapter =
+            FindFriendsRvAdapter(
+                requireContext()
+            )
+        binding.rvFindFriends.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvFindFriends.adapter = adapter
+        val divider = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        divider.setDrawable(requireContext().resources.getDrawable(R.drawable.rv_item_divider)!!)
+        binding.rvFindFriends.addItemDecoration(divider)
+
+        mViewModel.allUsers.observe(viewLifecycleOwner, Observer {users ->
+            adapter.submitList(users)
+        })
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,10 +92,5 @@ class FindFriendsFragment : Fragment() {
 //            else -> super.onOptionsItemSelected(item)
 //        }
 //    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mFirebaseAdapter.stopListening()
-    }
 
 }

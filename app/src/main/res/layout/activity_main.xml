@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_toolbar"
-    tools:context=".ui.Activities.mainActivity.MainActivity">
+    tools:context=".ui.activities.mainActivity.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -76,7 +76,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
-    
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_activity_frame"
         android:layout_width="match_parent"
@@ -90,12 +90,12 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:textAlignment="center"
-            app:tabSelectedTextColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tabIndicatorHeight="3dp"
-            app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextAppearance="@style/CustomTextStyle"
             app:tabTextColor="@android:color/white" />
 
         <androidx.viewpager2.widget.ViewPager2

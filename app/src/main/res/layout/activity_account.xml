@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Activities.AccountActivity.AccountActivity">
+    tools:context=".ui.activities.AccountActivity.AccountActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_account"

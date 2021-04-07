@@ -1,6 +1,5 @@
 package com.neo.mivchat.ui.fragments.notificationsFrament
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.neo.mivchat.R
-import com.neo.mivchat.model.User
+import com.neo.mivchat.dataSource.database.User
 import com.squareup.picasso.Picasso
 
 class NotificationsRvAdapter(options: FirebaseRecyclerOptions<User>) :
