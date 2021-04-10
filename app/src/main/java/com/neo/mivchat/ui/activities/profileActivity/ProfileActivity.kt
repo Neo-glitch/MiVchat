@@ -2,21 +2,12 @@ package com.neo.mivchat.ui.activities.profileActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.neo.mivchat.R
-import com.neo.mivchat.dataSource.database.Friend
 import com.neo.mivchat.databinding.ActivityProfileBinding
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlin.properties.Delegates
 
 class ProfileActivity : AppCompatActivity() {
@@ -82,11 +73,19 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun initButtonClickListener() {
-        mViewModel.hideBtnAdd.observe(this, Observer {
+        mViewModel.showBtnAdd.observe(this, Observer {
             if(it == 0){
                 binding.btnAddFriend.visibility = View.GONE
+                binding.btnDeclineRequest.visibility = View.GONE
             } else{
                 binding.btnAddFriend.visibility = View.VISIBLE
+            }
+        })
+        mViewModel.showBtnDecline.observe(this, Observer {
+            if(it == 1){
+                binding.btnDeclineRequest.visibility = View.VISIBLE
+            } else if(it == 0){
+                binding.btnDeclineRequest.visibility = View.GONE
             }
         })
 
@@ -99,6 +98,9 @@ class ProfileActivity : AppCompatActivity() {
                 2 -> mViewModel.acceptFriendRequest()
                 3 -> mViewModel.sendFriendRequest()
             }
+        }
+        binding.btnDeclineRequest.setOnClickListener {
+            mViewModel.declineFriendRequest("decline")
         }
     }
 

@@ -2,15 +2,13 @@ package com.neo.mivchat.ui.activities.profileActivity
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.neo.mivchat.dataSource.database.AppDao
-import com.neo.mivchat.dataSource.database.AppRoomDatabase
-import kotlinx.coroutines.runBlocking
 
 class ProfileActivityRepository(application: Application) {
 
@@ -18,7 +16,8 @@ class ProfileActivityRepository(application: Application) {
         private const val TAG = "ProfileActivityReposito"
     }
 
-    private val appDao: AppDao
+
+    private val mContext: Application = application
 
     // firebase
     private val mSenderId by lazy {
@@ -46,11 +45,11 @@ class ProfileActivityRepository(application: Application) {
     0 = hide btn since mCurrentUser viewing own profile
     1 = show btnAdd since mCurrentUser viewing other user profile
      */
-    val hideBtnAdd: MutableLiveData<Int> = MutableLiveData()
+    val showBtnAdd: MutableLiveData<Int> = MutableLiveData()
+    val showBtnDecline: MutableLiveData<Int> = MutableLiveData()
 
-    init {
-        val appDb = AppRoomDatabase.getDatabase(application)
-        appDao = appDb!!.appDao()
+    init{
+        showBtnDecline.value = 0
     }
 
     fun getReceiverUserId(receiverUserId: String){
@@ -67,6 +66,7 @@ class ProfileActivityRepository(application: Application) {
                         .setValue("received")
                         .addOnSuccessListener {
                             case.value = 0
+                            displayToast("Friend request sent successfully")
                         }
                 }
             }
@@ -80,12 +80,25 @@ class ProfileActivityRepository(application: Application) {
                     mFriendRequestsRef.child(mReceiverUserId).child(mSenderId).removeValue()
                         .addOnSuccessListener {
                             case.value = 3
+                            displayToast("Friend request canceled successfully")
                         }
                 }
             }
+    }
 
-
-
+    fun cancelFriendRequest(message: String) {  // for declining friend requests
+        Log.d(TAG, "cancelFriendRequest: starts")
+        mFriendRequestsRef.child(mSenderId).child(mReceiverUserId).removeValue()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    mFriendRequestsRef.child(mReceiverUserId).child(mSenderId).removeValue()
+                        .addOnSuccessListener {
+                            case.value = 3
+                            showBtnDecline.value = 0
+                            displayToast("Friend request declined")
+                        }
+                }
+            }
     }
 
     fun acceptFriendRequest() {
@@ -103,6 +116,8 @@ class ProfileActivityRepository(application: Application) {
                                                 .child(mSenderId).removeValue()
                                                 .addOnSuccessListener {
                                                     case.value = 1
+                                                    showBtnDecline.value = 0
+                                                    displayToast("Friend request accepted successfully")
                                                 }
                                         }
                                     }
@@ -120,6 +135,7 @@ class ProfileActivityRepository(application: Application) {
                     mFriendsRef.child(mReceiverUserId).child(mSenderId).removeValue()
                         .addOnSuccessListener {
                             case.value = 3
+                            displayToast("Friend deleted successfully")
                         }
                 }
             }
@@ -127,11 +143,11 @@ class ProfileActivityRepository(application: Application) {
 
     fun manageFriends(){
         if(mSenderId == mReceiverUserId){  // user views own profile
-            hideBtnAdd.value =  0
+            showBtnAdd.value =  0
         } else {  // user views other user profile
-            hideBtnAdd.value = 1
+            showBtnAdd.value = 1
         }
-        // fun retrieves needed stuff from db incase user leaves and come back to this fragment
+        // fun retrieves needed stuff from db in case user leaves and come back to this fragment
         mFriendRequestsRef.child(mSenderId).addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.hasChild(mReceiverUserId)){  // request has been sent to end user or request received from another user
@@ -163,7 +179,12 @@ class ProfileActivityRepository(application: Application) {
             case.value = 0
         } else if (requestType == "received") {  // request received from user
             case.value = 2
+            showBtnDecline.value = 1
         }
+    }
+
+    private fun displayToast(message: String){
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show()
     }
 
 }

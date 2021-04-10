@@ -1,12 +1,17 @@
 package com.neo.mivchat.ui.activities.mainActivity
 
+import android.app.Application
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.neo.mivchat.R
 import com.neo.mivchat.dataSource.database.FragmentTag
 
-class MainActivityViewModel: ViewModel() {
+class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val mContext = application
 
     // firebase
     private val mFirebaseDatabaseRef by lazy{
@@ -28,6 +33,8 @@ class MainActivityViewModel: ViewModel() {
         mFirebaseDatabaseRef.child("users")
     }
 
+
+
     fun acceptRequest(requestUserId: String) {  // id of user se
 //        mFriendsRef.child(mCurrentUserId).child(requestUserId).child("friends").setValue("saved")
         mFriendsRef.child(mCurrentUserId).child(requestUserId).setValue("friend")
@@ -39,7 +46,9 @@ class MainActivityViewModel: ViewModel() {
                             .removeValue()
                             .addOnSuccessListener {
                                 mFriendRequestsRef.child(requestUserId).child(mCurrentUserId)
-                                    .removeValue()
+                                    .removeValue().addOnSuccessListener {
+                                        displayToast("Friend Request Accepted")
+                                    }
                             }
                     }
             }
@@ -50,22 +59,17 @@ class MainActivityViewModel: ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     mFriendRequestsRef.child(requestUserId).child(mCurrentUserId).removeValue()
+                    displayToast("Friend request rejected")
                 }
             }
     }
-
-//    private val mSource =
-//        MainActivitySource()
-
-    var mFragmentTags: MutableList<String> = mutableListOf()
-    var mFragments: MutableList<FragmentTag> = mutableListOf()
 
 //    val mUsersRef = mSource.mUsersRef
 //    val mFriendsRef = mSource.mFriendsRef
 //    val mCurrentUserId = mSource.mCurrentUserId
 
-    // prop to hold id of last bottomNav menu item clicked on before activity recreation
-    var bottomNavDisplaySelection = R.id.homeFragment
 
-
+    private fun displayToast(message: String){
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show()
+    }
 }

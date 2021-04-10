@@ -21,7 +21,8 @@ class ProfileActivityViewModel(application: Application) : AndroidViewModel(appl
     0 = hide btn since mCurrentUser viewing own profile
     1 = show btnAdd since mCurrentUser viewing other user profile
      */
-    val hideBtnAdd: MutableLiveData<Int> = mProfileActivityRepository.hideBtnAdd
+    val showBtnAdd: MutableLiveData<Int> = mProfileActivityRepository.showBtnAdd
+    val showBtnDecline: MutableLiveData<Int> = mProfileActivityRepository.showBtnDecline
 
     fun getReceiverUserId(receiverUserId: String){
         mProfileActivityRepository.getReceiverUserId(receiverUserId)
@@ -33,6 +34,10 @@ class ProfileActivityViewModel(application: Application) : AndroidViewModel(appl
 
     fun cancelFriendRequest(){
         mProfileActivityRepository.cancelFriendRequest()
+    }
+
+    fun declineFriendRequest(message : String){
+        mProfileActivityRepository.cancelFriendRequest(message)
     }
 
     fun acceptFriendRequest(){

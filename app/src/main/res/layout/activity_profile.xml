@@ -65,11 +65,34 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="@+id/user_bio_profile"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/user_bio_profile"
                 app:layout_constraintTop_toBottomOf="@+id/user_bio_profile" />
+
+            <Button
+                android:id="@+id/btn_decline_request"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/btn_accept_add_style"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="5dp"
+                android:paddingTop="2dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="2dp"
+                android:text="Decline Request"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/btn_add_friend"
+                app:layout_constraintStart_toStartOf="@+id/btn_add_friend"
+                app:layout_constraintTop_toBottomOf="@+id/btn_add_friend" />
 
             <TextView
                 android:id="@+id/user_name_profile"

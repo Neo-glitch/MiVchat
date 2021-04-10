@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(),
         val view = binding.root
         setContentView(view)
 
-        mViewModel = ViewModelProvider(viewModelStore, ViewModelProvider.NewInstanceFactory())[MainActivityViewModel::class.java]
+        mViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         mUsersRef = mViewModel.mUsersRef
         mFriendsRef = mViewModel.mFriendsRef

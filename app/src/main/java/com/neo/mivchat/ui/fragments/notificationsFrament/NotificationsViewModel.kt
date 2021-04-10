@@ -62,6 +62,7 @@ class NotificationsViewModel : ViewModel() {
                     snapshot.value as HashMap<String, HashMap<String, HashMap<String, String>>>
 
                 something.forEach {
+                    Log.d(TAG, "again: ${it.key}")
                     if (it.key == mCurrentUserId && it.key != "dummy") {
                         it.value.forEach {
                             Log.d(TAG, "onDataChange: test ${it.key}")
