@@ -1,6 +1,7 @@
 package com.neo.mivchat.ui.fragments.notificationsFrament
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +21,6 @@ class NotificationsFragment : Fragment() {
     private val mViewModel by lazy {
         ViewModelProvider(this)[NotificationsViewModel::class.java]
     }
-//    private val mFirebaseRecyclerAdapter by lazy {
-//        mViewModel.initAdapter(requireContext())
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,13 +37,16 @@ class NotificationsFragment : Fragment() {
         mViewModel.getFriendRequestsIds()
         binding.rvNotifications.layoutManager = LinearLayoutManager(requireContext())
         val divider = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-        divider.setDrawable(requireContext().getDrawable(R.drawable.background_toolbar)!!)
+        divider.setDrawable(requireContext().getDrawable(R.drawable.rv_item_divider)!!)
         binding.rvNotifications.addItemDecoration(divider)
         val adapter = NotificationsRvAdapterAux(requireContext())
         binding.rvNotifications.adapter = adapter
 
         mViewModel.mFriendRequestsLive.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "list size is: ${it.size}")
             adapter.submitList(it)
+            adapter.notifyDataSetChanged()
         })
+
     }
 }

@@ -41,12 +41,19 @@ class FriendsFragmentViewModel(application: Application) : AndroidViewModel(appl
 
     fun getFriendsUserId() {
         Log.d(TAG, "getFriendsUserId: called")
-        val query: Query = mFriendsRef.child(mCurrentUserId)
+        val query: Query = mFriendsRef
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach { dataSnapShot ->
-                    val friendId: String = dataSnapShot.key.toString()
-                    getFriendInfoAndUpdateLocalDb(friendId)
+                viewModelScope.launch {
+                    mFriendsRepository.deleteAllFiends()
+                }
+                snapshot.children.forEach {it ->
+                    if(it.key == mCurrentUserId){  // we are in currentUser node in friends ref
+                        it.children.forEach {dataSnapShot ->
+                            val friendId: String = dataSnapShot.key.toString()
+                            getFriendInfoAndUpdateLocalDb(friendId)
+                        }
+                    }
                 }
             }
 
@@ -62,14 +69,11 @@ class FriendsFragmentViewModel(application: Application) : AndroidViewModel(appl
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     viewModelScope.launch {
-                        mFriendsRepository.deleteAllFiends()
                         snapshot.children.forEach { dataSnapShot ->
                             val user: User = dataSnapShot.getValue(User::class.java)!!
                             Log.d(TAG, "friend name: ${user.name}")
                             val friend = Friend(null, user.user_id!!)
-                            runBlocking {
-                                mFriendsRepository.insertFriend(friend)
-                            }
+                            mFriendsRepository.insertFriend(friend)
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.neo.mivchat.ui.activities.VideoChatActivity
+package com.neo.mivchat.ui.activities.videoChatActivity
 
 import android.Manifest
 import android.opengl.GLSurfaceView

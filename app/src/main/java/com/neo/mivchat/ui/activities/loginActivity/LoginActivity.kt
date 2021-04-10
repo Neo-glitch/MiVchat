@@ -1,4 +1,4 @@
-package com.neo.mivchat.ui.activities.LoginActivity
+package com.neo.mivchat.ui.activities.loginActivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.neo.mivchat.ui.activities.mainActivity.MainActivity
 import com.neo.mivchat.ui.dialog.PasswordResetDialog
 import com.neo.mivchat.R
-import com.neo.mivchat.ui.activities.RegisterActivity.RegisterActivity
+import com.neo.mivchat.ui.activities.registerActivity.RegisterActivity
 import com.neo.mivchat.ui.dialog.ResendEmailVerificationDialog
 import kotlinx.android.synthetic.main.activity_login.*
 

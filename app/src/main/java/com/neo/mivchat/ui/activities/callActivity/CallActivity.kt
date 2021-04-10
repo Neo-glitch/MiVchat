@@ -1,4 +1,4 @@
-package com.neo.mivchat.ui.activities.CallActivity
+package com.neo.mivchat.ui.activities.callActivity
 
 import android.app.Activity
 import android.media.MediaPlayer

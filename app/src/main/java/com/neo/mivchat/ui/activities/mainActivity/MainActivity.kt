@@ -14,20 +14,19 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.neo.mivchat.ui.activities.CallActivity.CallActivity
-import com.neo.mivchat.ui.activities.LoginActivity.LoginActivity
-import com.neo.mivchat.ui.activities.VideoChatActivity.VideoChatActivity
-import com.neo.mivchat.utilities.IMainActivity
 import com.neo.mivchat.R
 import com.neo.mivchat.databinding.ActivityMainBinding
+import com.neo.mivchat.ui.activities.accountActivity.AccountActivity
+import com.neo.mivchat.ui.activities.callActivity.CallActivity
+import com.neo.mivchat.ui.activities.loginActivity.LoginActivity
+import com.neo.mivchat.ui.activities.profileActivity.ProfileActivity
+import com.neo.mivchat.ui.activities.videoChatActivity.VideoChatActivity
 import com.neo.mivchat.ui.fragments.findFriendsFragment.FindFriendsFragment
 import com.neo.mivchat.ui.fragments.friendsFragment.FriendsFragment
 import com.neo.mivchat.ui.fragments.notificationsFrament.NotificationsFragment
-import com.neo.mivchat.ui.activities.AccountActivity.AccountActivity
-import com.neo.mivchat.ui.activities.ProfileActivity.ProfileActivity
+import com.neo.mivchat.utilities.IMainActivity
 import com.neo.mivchat.utilities.PagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 
 class MainActivity : AppCompatActivity(),

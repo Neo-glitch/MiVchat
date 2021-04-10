@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.ProfileActivity.ProfileActivity"></activity>
+        <activity android:name=".ui.activities.profileActivity.ProfileActivity"></activity>
         <activity
-            android:name=".ui.activities.AccountActivity.AccountActivity"
+            android:name=".ui.activities.accountActivity.AccountActivity"
             android:parentActivityName=".ui.activities.mainActivity.MainActivity" />
         <activity
             android:name=".ui.activities.LaunchActivity"
@@ -31,15 +31,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".ui.activities.CallActivity.CallActivity"
+            android:name=".ui.activities.callActivity.CallActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activities.VideoChatActivity.VideoChatActivity" />
+        <activity android:name=".ui.activities.videoChatActivity.VideoChatActivity" />
         <activity
-            android:name=".ui.activities.LoginActivity.LoginActivity"
+            android:name=".ui.activities.loginActivity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".ui.activities.RegisterActivity.RegisterActivity"
+            android:name=".ui.activities.registerActivity.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.mainActivity.MainActivity"

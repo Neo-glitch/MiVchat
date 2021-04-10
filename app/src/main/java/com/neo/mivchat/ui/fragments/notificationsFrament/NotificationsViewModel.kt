@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.neo.mivchat.dataSource.database.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
-class NotificationsViewModel: ViewModel() {
+class NotificationsViewModel : ViewModel() {
 
-    companion object{
+    companion object {
         private const val TAG = "NotificationsViewModel"
     }
 
@@ -39,26 +42,41 @@ class NotificationsViewModel: ViewModel() {
 
     // array list to hold all user_id of User added to current user friendRequest
     val mFriendRequestsIds: MutableLiveData<MutableList<String>> = MutableLiveData()
+    var mFriendRequestIds = mutableListOf<String>()
+    private val mFriendRequests = mutableListOf<User>()
+
+//    init {
+//        mFriendRequestsLive.value = mFriendRequests
+//    }
 
 
-    fun getFriendRequestsIds(){
-        var mFriendRequests: MutableList<User> = mutableListOf()
-        val query = mFriendRequestsRef.orderByKey().equalTo(mCurrentUserId)
-        query.addValueEventListener(object : ValueEventListener{
+    fun getFriendRequestsIds() {
+//        val query = mFriendRequestsRef.orderByKey().equalTo(mCurrentUserId)
+        val query = mFriendRequestsRef
+        query.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach {userIdDataSnapshot ->
-                    val something: HashMap<String, HashMap<String, String>> = userIdDataSnapshot.value as HashMap<String, HashMap<String, String>>
-                    
-                    something.forEach {
-                        val friendRequestUserId = it.key
-                        it.value.forEach{
-                            if(it.value == "received"){  // adds only user received friendRequest, to be displayed in rv
-                                getFriendRequestUserInfoAndUpdateRvList(friendRequestUserId, mFriendRequests)
+                mFriendRequestIds.clear()
+                mFriendRequests.clear()
+                val something: HashMap<String, HashMap<String, HashMap<String, String>>> =
+                    snapshot.value as HashMap<String, HashMap<String, HashMap<String, String>>>
+
+                something.forEach {
+                    if (it.key == mCurrentUserId && it.key != "dummy") {
+                        it.value.forEach {
+                            Log.d(TAG, "onDataChange: test ${it.key}")
+                            val friendRequestUserId = it.key
+                            it.value.forEach {
+                                Log.d(TAG, "onDataChange: tch ${it.value}")
+                                if (it.value == "received") {  // only add to list, if received friendRequest
+                                    mFriendRequestIds.add(friendRequestUserId)
+                                }
                             }
                         }
+                        return@forEach
                     }
                 }
+                getFriendRequestUserInfoAndUpdateRvList(mFriendRequestIds)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -67,35 +85,28 @@ class NotificationsViewModel: ViewModel() {
     }
 
     private fun getFriendRequestUserInfoAndUpdateRvList(
-        userId: String,
-        mFriendRequests: MutableList<User>
-    ){
-        val query = mFirebasedatabaseRef.child("users").orderByKey().equalTo(userId)
+        mFriendRequestIds: MutableList<String>
+    ) {
+        if (mFriendRequestIds.size > 0) {
+            for (userId: String in mFriendRequestIds) {
+                val query = mFirebasedatabaseRef.child("users").orderByKey().equalTo(userId)
+                query.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.children.forEach { dataSnapshot ->
+                            val user: User = dataSnapshot.getValue(User::class.java)!!
+                            Log.d(TAG, "User is: ${user.name}")
+                            mFriendRequests.add(user)
+                        }
+                        mFriendRequestsLive.value = mFriendRequests
+                    }
 
-        query.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach { dataSnapshot ->
-                    val user: User = dataSnapshot.getValue(User::class.java)!!
-                    mFriendRequests.add(user)
-                    mFriendRequestsLive.value = mFriendRequests
-                }
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
             }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+        } else {
+            mFriendRequestsLive.value = mFriendRequests
+        }
     }
 
-//    private val mSource =
-//        NotificationsSource()
-//
-//    fun initAdapter(context: Context): FirebaseRecyclerAdapter<User, NotificationsRvViewHolder> {
-//        val firebaseAdapter =
-//            NotificationsRvAdapter(
-//                context,
-//                mSource.getAllFriendRequests()
-//            )
-//        firebaseAdapter.startListening()
-//        return firebaseAdapter
-//    }
 }

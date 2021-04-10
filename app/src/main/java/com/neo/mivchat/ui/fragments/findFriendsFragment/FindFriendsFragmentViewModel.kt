@@ -39,9 +39,11 @@ class FindFriendsFragmentViewModel(application: Application) : AndroidViewModel(
                 viewModelScope.launch {
                     mFindFriendsRepository.deleteAllUsers()
                     snapshot.children.forEach { dataSnapShot ->
-                        val user: User = dataSnapShot.getValue(User::class.java)!!
-                        runBlocking {
-                            mFindFriendsRepository.insertUser(user)
+                        if(dataSnapShot.key.toString() != "dummy"){
+                            val user: User = dataSnapShot.getValue(User::class.java)!!
+                            runBlocking {
+                                mFindFriendsRepository.insertUser(user)
+                            }
                         }
                     }
                 }

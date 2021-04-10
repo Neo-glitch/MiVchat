@@ -42,7 +42,7 @@ class NotificationsRvAdapter(options: FirebaseRecyclerOptions<User>) :
                     var type = snapshot.value.toString()
                     if (type == "received") {  // received friend requests
                         holder.itemView.visibility = View.VISIBLE
-                        NotificationsSource().mUsersRef.child(listUserId)
+                        NotificationsRepository().mUsersRef.child(listUserId)
                             .addValueEventListener(object :
                                 ValueEventListener {   // queries node of user in rv to get needed details
                                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -57,11 +57,11 @@ class NotificationsRvAdapter(options: FirebaseRecyclerOptions<User>) :
                                     holder.userName.text =
                                         (snapshot.child("name").value.toString())
                                     holder.addFriendBtn.setOnClickListener {
-                                        NotificationsSource()
+                                        NotificationsRepository()
                                             .acceptRequest(listUserId)
                                     }
                                     holder.cancelFriendBtn.setOnClickListener {
-                                        NotificationsSource()
+                                        NotificationsRepository()
                                             .declineRequest(listUserId)
                                     }
                                 }

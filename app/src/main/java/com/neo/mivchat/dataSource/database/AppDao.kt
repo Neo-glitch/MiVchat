@@ -14,7 +14,7 @@ interface AppDao {
     suspend fun insert(user: User)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(friends: Friend)
+    suspend fun insert(friend: Friend)
 
     @Query("select * from find_friends_table order by name")
     fun getAllUsers(): Factory<Int, User>

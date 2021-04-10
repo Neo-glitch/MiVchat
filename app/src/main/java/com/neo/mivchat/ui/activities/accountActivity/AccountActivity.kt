@@ -1,4 +1,4 @@
-package com.neo.mivchat.ui.activities.AccountActivity
+package com.neo.mivchat.ui.activities.accountActivity
 
 import android.app.Activity
 import android.content.ContentResolver
