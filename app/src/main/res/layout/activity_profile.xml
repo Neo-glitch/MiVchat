@@ -27,8 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/simeone_panda" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -38,12 +37,12 @@
                 android:id="@+id/user_image_profile_small"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="164dp"
+                android:layout_marginTop="196dp"
+                android:src="@drawable/profile_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/simeone_panda_1" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_add_friend"
@@ -77,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/btn_accept_add_style"
+                android:backgroundTint="@android:color/holo_red_dark"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="sans-serif-condensed-medium"

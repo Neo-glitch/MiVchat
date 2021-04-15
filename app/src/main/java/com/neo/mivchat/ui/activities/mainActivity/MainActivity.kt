@@ -3,6 +3,7 @@ package com.neo.mivchat.ui.activities.mainActivity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import com.neo.mivchat.R
 import com.neo.mivchat.databinding.ActivityMainBinding
 import com.neo.mivchat.ui.activities.accountActivity.AccountActivity
@@ -58,6 +57,10 @@ class MainActivity : AppCompatActivity(),
 
     //Binding
     private lateinit var binding: ActivityMainBinding
+
+    private val mFirebaseDatabaseRef by lazy {
+        FirebaseDatabase.getInstance().reference
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -183,25 +186,59 @@ class MainActivity : AppCompatActivity(),
 
     // check if user has an incoming call
     private fun ifReceivingCall() {
-        mUsersRef.child(mCurrentUserId).child("Ringing").addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.hasChild("ringing")) {  // user has an incoming call
-                    mCalledBy = snapshot.child("ringing").value.toString()
-                    startCallActivity(mCalledBy)
-                }
-            }
+//        mUsersRef.child(mCurrentUserId).child("Ringing").addValueEventListener(object :
+//            ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if (snapshot.hasChild("ringing")) {  // user has an incoming call
+//                    mCalledBy = snapshot.child("ringing").value.toString()
+//                    startCallActivity(mCalledBy)
+//                }
+//            }
+//            override fun onCancelled(error: DatabaseError) {
+//            }
+//        })
 
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+        // my way of handling incoming call
+        mFirebaseDatabaseRef.child("call_node").child(mCurrentUserId)
+            .addValueEventListener(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.hasChild("called_by")){ // user has incoming call
+                        mCalledBy = snapshot.child("called_by").value.toString()
+                        startCallActivity(mCalledBy)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
     }
 
 
     override fun startCallActivity(listUserId: String) {
-        val intent = Intent(this, CallActivity::class.java)
-        intent.putExtra(VISIT_USER_ID, listUserId)
-        startActivityForResult(intent, CALLING_ACTIVITY)
+        // check if user making call is connected first
+        val connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected")
+        connectedRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val connected = snapshot.getValue(Boolean::class.java) ?: false
+                if (connected) {
+                    Log.d(TAG, "connected")
+                    val intent = Intent(this@MainActivity, CallActivity::class.java)
+                    intent.putExtra(VISIT_USER_ID, listUserId)
+                    startActivityForResult(intent, CALLING_ACTIVITY)
+                } else {
+                    Log.d(TAG, "not connected")
+
+                    // dialog telling user that to make call he needs internet
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Listener was cancelled")
+            }
+        })
+
+
     }
 
     override fun inflateProfileActivity(

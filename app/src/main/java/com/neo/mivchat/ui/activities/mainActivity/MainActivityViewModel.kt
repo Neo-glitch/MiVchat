@@ -3,11 +3,8 @@ package com.neo.mivchat.ui.activities.mainActivity
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.neo.mivchat.R
-import com.neo.mivchat.dataSource.database.FragmentTag
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -36,10 +33,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
 
     fun acceptRequest(requestUserId: String) {  // id of user se
-//        mFriendsRef.child(mCurrentUserId).child(requestUserId).child("friends").setValue("saved")
         mFriendsRef.child(mCurrentUserId).child(requestUserId).setValue("friend")
             .addOnSuccessListener {
-//                mFriendsRef.child(requestUserId).child(mCurrentUserId).child("friends").setValue("saved")
                 mFriendsRef.child(requestUserId).child(mCurrentUserId).setValue("friend")
                     .addOnSuccessListener {
                         mFriendRequestsRef.child(mCurrentUserId).child(requestUserId)
@@ -64,10 +59,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             }
     }
 
-//    val mUsersRef = mSource.mUsersRef
-//    val mFriendsRef = mSource.mFriendsRef
-//    val mCurrentUserId = mSource.mCurrentUserId
+    fun ifReceivingCall(){
 
+    }
 
     private fun displayToast(message: String){
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show()

@@ -57,12 +57,12 @@ class NotificationsRvAdapter(options: FirebaseRecyclerOptions<User>) :
                                     holder.userName.text =
                                         (snapshot.child("name").value.toString())
                                     holder.addFriendBtn.setOnClickListener {
-                                        NotificationsRepository()
-                                            .acceptRequest(listUserId)
+//                                        NotificationsRepository()
+//                                            .acceptRequest(listUserId)
                                     }
                                     holder.cancelFriendBtn.setOnClickListener {
-                                        NotificationsRepository()
-                                            .declineRequest(listUserId)
+//                                        NotificationsRepository()
+//                                            .declineRequest(listUserId)
                                     }
                                 }
 
