@@ -6,8 +6,8 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.neo.mivchat.dataSource.database.AppDao
 import com.neo.mivchat.dataSource.database.AppRoomDatabase
-import com.neo.mivchat.dataSource.database.Friend
-import com.neo.mivchat.dataSource.database.User
+import com.neo.mivchat.model.Friend
+import com.neo.mivchat.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 

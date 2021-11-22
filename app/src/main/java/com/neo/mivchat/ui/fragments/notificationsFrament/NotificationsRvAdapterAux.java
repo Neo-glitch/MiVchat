@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.neo.mivchat.R;
-import com.neo.mivchat.dataSource.database.User;
-import com.neo.mivchat.utilities.IMainActivity;
+import com.neo.mivchat.model.User;
+import com.neo.mivchat.interfaces.IMainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -38,7 +38,7 @@ public class NotificationsRvAdapterAux extends ListAdapter<User, NotificationsRv
         }
     };
 
-    protected NotificationsRvAdapterAux(Context context) {
+    public NotificationsRvAdapterAux(Context context) {
         super(sItemCallback);
         mContext = context;
         mListener = (IMainActivity) mContext;

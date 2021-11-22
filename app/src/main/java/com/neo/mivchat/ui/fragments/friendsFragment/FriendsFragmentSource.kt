@@ -3,7 +3,7 @@ package com.neo.mivchat.ui.fragments.friendsFragment
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.neo.mivchat.dataSource.database.User
+import com.neo.mivchat.model.User
 
 class FriendsFragmentSource {
     // firebase

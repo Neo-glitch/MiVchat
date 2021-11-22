@@ -6,9 +6,8 @@ import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.neo.mivchat.ui.activities.loginActivity.LoginActivity
-import com.neo.mivchat.ui.activities.mainActivity.MainActivity
 import com.neo.mivchat.R
+import com.neo.mivchat.ui.activities.auth.LoginActivity
 
 class SplashScreenActivity : AppCompatActivity() {
     // widget

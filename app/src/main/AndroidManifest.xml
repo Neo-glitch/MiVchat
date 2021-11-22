@@ -5,18 +5,22 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.profileActivity.ProfileActivity"></activity>
+        <activity android:name=".ui.activities.ProfileActivity"></activity>
         <activity
-            android:name=".ui.activities.accountActivity.AccountActivity"
-            android:parentActivityName=".ui.activities.mainActivity.MainActivity" />
+            android:name=".ui.activities.AccountActivity"
+            android:parentActivityName=".ui.activities.MainActivity" />
         <activity
             android:name=".ui.activities.LaunchActivity"
             android:theme="@style/SplashTheme">
@@ -31,18 +35,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".ui.activities.callActivity.CallActivity"
+            android:name=".ui.activities.CallActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activities.videoChatActivity.VideoChatActivity" />
+        <activity android:name=".ui.activities.VideoChatActivity" />
         <activity
-            android:name=".ui.activities.loginActivity.LoginActivity"
+            android:name=".ui.activities.auth.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".ui.activities.registerActivity.RegisterActivity"
+            android:name=".ui.activities.auth.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activities.mainActivity.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 

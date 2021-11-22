@@ -1,13 +1,14 @@
 package com.neo.mivchat.dataSource.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import com.neo.mivchat.Constants
+import com.neo.mivchat.model.Friend
+import com.neo.mivchat.model.User
 
 
 @Database(entities = [User::class, Friend::class], version = 1, exportSchema = false)
+@TypeConverters(ListTypeConverter::class)
 abstract class AppRoomDatabase: RoomDatabase() {
 
     abstract fun appDao() : AppDao
