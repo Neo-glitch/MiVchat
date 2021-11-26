@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.neo.mivchat.R
 import com.neo.mivchat.databinding.FragmentNotificationsBinding
-import com.neo.mivchat.ui.fragments.notificationsFrament.NotificationsRvAdapterAux
+import com.neo.mivchat.adapters.NotificationsRvAdapter
 import com.neo.mivchat.viewmodel.NotificationsViewModel
 
 
@@ -41,7 +41,10 @@ class NotificationsFragment : Fragment() {
         val divider = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         divider.setDrawable(requireContext().getDrawable(R.drawable.rv_item_divider)!!)
         binding.rvNotifications.addItemDecoration(divider)
-        val adapter = NotificationsRvAdapterAux(requireContext())
+        val adapter =
+            NotificationsRvAdapter(
+                requireContext()
+            )
         binding.rvNotifications.adapter = adapter
 
         mViewModel.mFriendRequestsLive.observe(viewLifecycleOwner, Observer {

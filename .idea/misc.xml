@@ -3,6 +3,31 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable-v24/background.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable-v24/bg_sign_in.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable-v24/btn_decline_style.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable-v24/btn_sign_in.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable-v24/change_photo_style.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/alertdialog_background.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/background_toolbar.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/bg_accept_btn.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/bg_alert_dialog.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/bg_change_photo.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/bg_decline_btn.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/bg_sign_in.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/btn_accept_add_style.xml" value="0.18796296296296297" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/drawable/ic_cancel.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/activity_account.xml" value="0.2" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/activity_profile.xml" value="0.14537037037037037" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/dialog_profile.xml" value="0.22" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/item_call.xml" value="0.1921875" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/item_find_friends.xml" value="0.33" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/item_friends.xml" value="0.14537037037037037" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/item_notification_call.xml" value="0.1921875" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/item_notification_request.xml" value="0.25" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/item_requests.xml" value="0.1921875" />
+        <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/layout/progress_layout.xml" value="0.12" />
         <entry key="..\:/Android_Apps/MiVchat/app/src/main/res/menu/menu_bottom_nav.xml" value="0.1921875" />
       </map>
     </option>

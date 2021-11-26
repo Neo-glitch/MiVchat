@@ -1,10 +1,14 @@
 package com.neo.mivchat.model
 
+import android.os.Parcelable
 import androidx.room.*
 import com.neo.mivchat.Constants
 import com.neo.mivchat.dataSource.database.ListTypeConverter
+import kotlinx.android.parcel.Parcelize
 
 
+// parcelize annotation to make parcelable implementation easy
+@Parcelize
 @Entity(tableName = Constants.USER_TABLE)
 data class User
     (
@@ -21,5 +25,5 @@ data class User
 
     @ColumnInfo(name = "friends")
     @TypeConverters(ListTypeConverter::class)
-    var friends: MutableList<String>? = null
-)
+    var friends: MutableList<String> = mutableListOf()
+): Parcelable

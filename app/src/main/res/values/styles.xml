@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="alertDialogTheme">@style/CustomAlertDialogStyle</item>
     </style>
 
     <style name="LoginTheme" parent="AppTheme">
@@ -31,6 +32,11 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <!--  for custom alert dialog corner  -->
+    <style name="CustomAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_alert_dialog</item>
     </style>
 
 

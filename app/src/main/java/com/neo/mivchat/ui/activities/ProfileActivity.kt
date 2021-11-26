@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.neo.mivchat.R
 import com.neo.mivchat.databinding.ActivityProfileBinding
-import com.neo.mivchat.viewmodel.ProfileActivityViewModel
+import com.neo.mivchat.viewmodel.ProfileViewModel
 import com.squareup.picasso.Picasso
 import kotlin.properties.Delegates
 
@@ -30,7 +30,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var mReceiverBio: String
 
     private val mViewModel by lazy {
-        ViewModelProvider(this)[ProfileActivityViewModel::class.java]
+        ViewModelProvider(this)[ProfileViewModel::class.java]
     }
 
     private lateinit var binding: ActivityProfileBinding

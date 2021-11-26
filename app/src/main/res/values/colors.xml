@@ -8,4 +8,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="linkBlue">#4d94ff</color>
     <color name="green1">#29CF40</color>
+    <color name="white">#ffff</color>
+    <color name="transparent_green">#1A0DD12C</color>
+    <color name="transparent_color">#0F00FF19</color>
 </resources>

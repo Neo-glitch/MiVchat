@@ -73,7 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Sign up"
-        android:background="@drawable/btn_sign_in"
+        android:background="@drawable/bg_sign_in"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editText_confirmpassword"

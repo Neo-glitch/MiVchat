@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.neo.mivchat.repository.ProfileRepository
 
-class ProfileActivityViewModel(application: Application) : AndroidViewModel(application) {
+class ProfileViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var mReceiverUserId: String  // receiver of friendsRequest
     private var mProfileActivityRepository = ProfileRepository(application)
 

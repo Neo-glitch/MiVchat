@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                 android:layout_marginStart="120dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="120dp"
-                android:background="@drawable/btn_accept_add_style"
+                android:background="@drawable/bg_accept_btn"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="sans-serif-condensed-medium"
@@ -75,7 +75,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/btn_accept_add_style"
+                android:background="@drawable/bg_accept_btn"
                 android:backgroundTint="@android:color/holo_red_dark"
                 android:clickable="true"
                 android:focusable="true"

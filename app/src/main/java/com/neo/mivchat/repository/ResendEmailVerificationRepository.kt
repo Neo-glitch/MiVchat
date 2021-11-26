@@ -13,7 +13,7 @@ class ResendEmailVerificationRepository(application: Application) {
     val dismissDialog: MutableLiveData<Boolean> = MutableLiveData()
 
 
-    fun authAndResendVerification(email: String, password: String) {
+    fun authAndResendVerificationMail(email: String, password: String) {
         val credential: AuthCredential = EmailAuthProvider.getCredential(email, password)
 
         FirebaseDataSource.getAuth().signInWithCredential(credential)
@@ -39,5 +39,6 @@ class ResendEmailVerificationRepository(application: Application) {
                 Helper.showMessage(mContext, text)
                 dismissDialog.value = true
             }
+        FirebaseDataSource.getAuth().signOut()
     }
 }

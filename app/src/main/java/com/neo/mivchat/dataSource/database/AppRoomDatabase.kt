@@ -8,7 +8,7 @@ import com.neo.mivchat.model.User
 
 
 @Database(entities = [User::class, Friend::class], version = 1, exportSchema = false)
-@TypeConverters(ListTypeConverter::class)
+@TypeConverters(ListTypeConverter::class, NotificationTypeConverter::class)
 abstract class AppRoomDatabase: RoomDatabase() {
 
     abstract fun appDao() : AppDao

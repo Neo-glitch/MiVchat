@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#1A0DD12C"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_image_findfriends"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/profile_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/friend_request_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:maxLines="3"
+        android:fontFamily="@font/poppins"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/user_image_findfriends"
+        app:layout_constraintTop_toTopOf="@+id/user_image_findfriends"
+        tools:text="Nweke Emmanuel Sent you a friend request "/>
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/user_bio_findfriends"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="2dp"-->
+    <!--            android:textAlignment="viewStart"-->
+    <!--            android:textSize="12sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            app:layout_constraintBottom_toBottomOf="@+id/user_image_findfriends"-->
+    <!--            app:layout_constraintEnd_toEndOf="@+id/user_name_findfriends"-->
+    <!--            app:layout_constraintHorizontal_bias="0.0"-->
+    <!--            app:layout_constraintStart_toStartOf="@+id/user_name_findfriends"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/user_name_findfriends"-->
+    <!--            app:layout_constraintVertical_bias="0.0"-->
+    <!--            tools:text="I am just here to catch cruise" />-->
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/friend_request_text"
+        app:layout_constraintStart_toStartOf="@+id/friend_request_text"
+        app:layout_constraintTop_toBottomOf="@+id/friend_request_text"
+        app:layout_constraintVertical_bias="0.0">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_accept_btn"
+            android:fontFamily="@font/poppins"
+            android:text="Accept"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_decline_btn"
+            android:clickable="true"
+            android:fontFamily="@font/poppins"
+            android:text="Decline"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/progress_bar"
+        style="@style/SpinKitView.Small.FadingCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        app:SpinKit_Color="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="@+id/friend_request_text"
+        app:layout_constraintStart_toStartOf="@+id/friend_request_text"
+        app:layout_constraintTop_toBottomOf="@+id/friend_request_text" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

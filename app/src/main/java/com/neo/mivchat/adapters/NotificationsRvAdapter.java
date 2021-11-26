@@ -1,4 +1,4 @@
-package com.neo.mivchat.ui.fragments.notificationsFrament;
+package com.neo.mivchat.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,10 +21,11 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class NotificationsRvAdapterAux extends ListAdapter<User, NotificationsRvAdapterAux.NotificationsRvViewHolder> {
+public class NotificationsRvAdapter extends ListAdapter<User, NotificationsRvAdapter.NotificationsRvViewHolder> {
 
     private IMainActivity mListener;
     private Context mContext;
+
 
     private static DiffUtil.ItemCallback<User> sItemCallback = new DiffUtil.ItemCallback<User>() {
         @Override
@@ -38,7 +39,7 @@ public class NotificationsRvAdapterAux extends ListAdapter<User, NotificationsRv
         }
     };
 
-    public NotificationsRvAdapterAux(Context context) {
+    public NotificationsRvAdapter(Context context) {
         super(sItemCallback);
         mContext = context;
         mListener = (IMainActivity) mContext;
@@ -59,6 +60,11 @@ public class NotificationsRvAdapterAux extends ListAdapter<User, NotificationsRv
             holder.setData(user);
             holder.setListeners();
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     class NotificationsRvViewHolder extends RecyclerView.ViewHolder{
